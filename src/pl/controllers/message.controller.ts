@@ -14,9 +14,11 @@ import type { Response } from 'express';
 import {
   CHAT_SERVICE,
   MESSAGE_SERVICE,
+  USER_SERVICE,
 } from '../../constants/injection-tokens';
 import type { IMessageService } from '../../bll/interfaces/message.service.interface';
 import type { IChatService } from '../../bll/interfaces/chat.service.interface';
+import type { IUserService } from '../../bll/interfaces/user.service.interface';
 import { MessageType } from '../../dal/entities/enums';
 
 interface CreateMessageBody {
@@ -39,6 +41,7 @@ export class MessageController {
   constructor(
     @Inject(MESSAGE_SERVICE) private readonly messages: IMessageService,
     @Inject(CHAT_SERVICE) private readonly chats: IChatService,
+    @Inject(USER_SERVICE) private readonly users: IUserService,
   ) {}
 
   @Get('/')
@@ -63,8 +66,11 @@ export class MessageController {
   @Get('/messages/new')
   @Render('messages/create')
   async newForm() {
-    const chats = await this.chats.findAll();
-    return { chats };
+    const [chats, users] = await Promise.all([
+      this.chats.findAll(),
+      this.users.getAll(),
+    ]);
+    return { chats, users };
   }
 
   @Get('/messages/:id')
