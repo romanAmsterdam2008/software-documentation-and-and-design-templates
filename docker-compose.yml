@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: discord-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: discord
+      POSTGRES_PASSWORD: discord
+      POSTGRES_DB: discord
+    ports:
+      - "5433:5432"
+    volumes:
+      - discord-pg-data:/var/lib/postgresql/data
+
+volumes:
+  discord-pg-data:
