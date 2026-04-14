@@ -1,0 +1,62 @@
+{{> header}}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Messages</h1>
+    <div class="page-subtitle">{{messages.length}} message(s){{#if currentType}} · filtered by {{currentType}}{{/if}}</div>
+  </div>
+  <a href="/messages/new" class="btn btn-success">+ New Message</a>
+</div>
+
+<div class="toolbar">
+  <form method="get" action="/messages" style="display:flex;gap:10px;">
+    <select name="type" class="form-control" onchange="this.form.submit()">
+      <option value="" {{#if (eq currentType "")}}selected{{/if}}>All types</option>
+      <option value="TEXT" {{#if (eq currentType "TEXT")}}selected{{/if}}>TEXT</option>
+      <option value="ATTACHMENT" {{#if (eq currentType "ATTACHMENT")}}selected{{/if}}>ATTACHMENT</option>
+    </select>
+  </form>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Content</th>
+        <th>Chat</th>
+        <th>Date</th>
+        <th style="text-align:right;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each messages}}
+        <tr>
+          <td><span class="id-pill">{{shortId messageId}}</span></td>
+          <td><span class="badge badge-{{typeBadge type}}">{{type}}</span></td>
+          <td>
+            {{#if (eq type "TEXT")}}
+              {{preview text 60}}
+            {{else}}
+              <span style="color:var(--text-muted);">{{fileType}}</span>
+            {{/if}}
+          </td>
+          <td>{{#if chat}}{{chat.title}}{{else}}<span style="color:var(--text-faded);">—</span>{{/if}}</td>
+          <td><span style="color:var(--text-muted);font-size:13px;">{{formatDate timestamp}}</span></td>
+          <td>
+            <div class="actions">
+              <a href="/messages/{{messageId}}" class="btn btn-sm btn-ghost">View</a>
+              <a href="/messages/{{messageId}}/edit" class="btn btn-sm btn-ghost">Edit</a>
+              <form method="post" action="/messages/{{messageId}}/delete" style="display:inline;" onsubmit="return confirm('Delete this message?')">
+                <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {{else}}
+        <tr><td colspan="6"><div class="empty">No messages yet.</div></td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+{{> footer}}

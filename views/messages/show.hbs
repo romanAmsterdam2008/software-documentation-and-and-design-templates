@@ -1,0 +1,54 @@
+{{> header}}
+{{#if message}}
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Message details</h1>
+      <div class="page-subtitle"><span class="id-pill">{{message.messageId}}</span></div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <a href="/messages" class="btn btn-ghost">← Back</a>
+      <a href="/messages/{{message.messageId}}/edit" class="btn btn-primary">Edit</a>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-header">Message</div>
+    <div class="card-body">
+      <dl class="meta-grid">
+        <dt>Type</dt>
+        <dd><span class="badge badge-{{typeBadge message.type}}">{{message.type}}</span></dd>
+        <dt>Author ID</dt>
+        <dd><span class="mono">{{message.authorId}}</span></dd>
+        <dt>Timestamp</dt>
+        <dd>{{formatDate message.timestamp}}</dd>
+      </dl>
+
+      {{#if (eq message.type "TEXT")}}
+        <div class="content-block">{{message.text}}</div>
+      {{else}}
+        <div class="content-block attachment">
+          <div style="margin-bottom:8px;color:var(--text-muted);font-size:12px;text-transform:uppercase;letter-spacing:0.04em;">{{message.fileType}}</div>
+          <a href="{{message.fileUrl}}" target="_blank">{{message.fileUrl}}</a>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if message.chat}}
+    <div class="card">
+      <div class="card-header">Chat</div>
+      <div class="card-body">
+        <dl class="meta-grid">
+          <dt>Chat ID</dt>
+          <dd><span class="mono">{{message.chat.chatId}}</span></dd>
+          <dt>Title</dt>
+          <dd style="font-weight:600;">{{message.chat.title}}</dd>
+        </dl>
+      </div>
+    </div>
+  {{/if}}
+{{else}}
+  <div class="alert">Message not found.</div>
+  <a href="/messages" class="btn btn-ghost">← Back</a>
+{{/if}}
+{{> footer}}
