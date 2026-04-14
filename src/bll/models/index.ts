@@ -19,6 +19,7 @@ export abstract class MessageModel {
   chatId!: string;
   timestamp!: Date;
   type!: MessageType;
+  chat?: ChatModel;
 }
 
 export class TextMessageModel extends MessageModel {

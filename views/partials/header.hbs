@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Discord MVC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1e1f22;
+      --bg-elevated: #2b2d31;
+      --bg-input: #383a40;
+      --border: #3f4147;
+      --text: #f2f3f5;
+      --text-muted: #b5bac1;
+      --text-faded: #80848e;
+      --blurple: #5865f2;
+      --blurple-hover: #4752c4;
+      --green: #23a559;
+      --yellow: #f0b232;
+      --red: #f23f43;
+      --danger-hover: #c03537;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    code, .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.85em; }
+    a { color: var(--blurple); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    h1, h2, h3 { font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+
+    .navbar {
+      background: #111214;
+      border-bottom: 1px solid #000;
+      padding: 14px 0;
+      position: sticky; top: 0; z-index: 10;
+    }
+    .navbar-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; gap: 32px;
+    }
+    .brand {
+      font-weight: 700; font-size: 18px; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .brand-mark {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--blurple);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: white; font-size: 18px;
+    }
+    .nav-links { display: flex; gap: 4px; flex: 1; }
+    .nav-links a {
+      color: var(--text-muted); padding: 8px 14px; border-radius: 6px;
+      font-weight: 500; font-size: 14px; transition: all 0.15s;
+    }
+    .nav-links a:hover {
+      background: var(--bg-elevated); color: var(--text); text-decoration: none;
+    }
+    .nav-cta {
+      background: var(--blurple) !important; color: white !important;
+    }
+    .nav-cta:hover { background: var(--blurple-hover) !important; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px; gap: 16px;
+    }
+    .page-title { font-size: 28px; }
+    .page-subtitle { color: var(--text-muted); margin-top: 4px; font-size: 14px; }
+
+    .card {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      font-weight: 600; font-size: 13px; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--text-muted);
+    }
+    .card-body { padding: 20px; }
+    .card-footer {
+      padding: 16px 20px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; gap: 12px;
+    }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      text-align: left; padding: 12px 20px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--text-faded);
+      background: rgba(0,0,0,0.15); border-bottom: 1px solid var(--border);
+    }
+    tbody td {
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+    .badge {
+      display: inline-block; padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .badge-primary { background: rgba(88,101,242,0.18); color: #a5adff; }
+    .badge-warning { background: rgba(240,178,50,0.18); color: #ffd175; }
+    .badge-secondary { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 500;
+      transition: all 0.15s; text-decoration: none;
+    }
+    .btn:hover { text-decoration: none; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .btn-primary { background: var(--blurple); color: white; }
+    .btn-primary:hover { background: var(--blurple-hover); color: white; }
+    .btn-success { background: var(--green); color: white; }
+    .btn-success:hover { background: #1a7f43; color: white; }
+    .btn-danger { background: transparent; color: var(--red); border: 1px solid transparent; }
+    .btn-danger:hover { background: rgba(242,63,67,0.1); color: var(--red); }
+    .btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--bg-input); color: var(--text); }
+    .btn-outline { background: transparent; color: var(--blurple); border: 1px solid var(--blurple); }
+    .btn-outline:hover { background: rgba(88,101,242,0.1); color: var(--blurple); }
+
+    .actions { display: flex; gap: 6px; justify-content: flex-end; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-label {
+      display: block; margin-bottom: 8px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--text-muted);
+    }
+    .form-control {
+      width: 100%; padding: 10px 12px; border-radius: 4px;
+      background: var(--bg-input); color: var(--text);
+      border: 1px solid transparent; font-family: inherit; font-size: 14px;
+      transition: border-color 0.15s;
+    }
+    .form-control:focus {
+      outline: none; border-color: var(--blurple);
+      background: #303135;
+    }
+    textarea.form-control { resize: vertical; min-height: 96px; }
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%23b5bac1' d='M6 8L2 4h8z'/></svg>");
+      background-repeat: no-repeat; background-position: right 12px center;
+      padding-right: 32px;
+    }
+
+    .toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .toolbar select {
+      width: auto; min-width: 180px;
+    }
+
+    .empty {
+      text-align: center; padding: 48px 24px; color: var(--text-faded);
+    }
+
+    .meta-grid {
+      display: grid; grid-template-columns: 160px 1fr; gap: 12px 20px;
+      font-size: 14px;
+    }
+    .meta-grid dt { color: var(--text-muted); font-weight: 500; }
+    .meta-grid dd { margin: 0; word-break: break-all; }
+
+    .content-block {
+      margin-top: 16px; padding: 16px; border-radius: 6px;
+      background: rgba(0,0,0,0.2); border-left: 3px solid var(--blurple);
+      white-space: pre-wrap; line-height: 1.6;
+    }
+    .content-block.attachment { border-left-color: var(--yellow); }
+
+    .id-pill {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      background: rgba(0,0,0,0.25); font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: var(--text-muted);
+    }
+
+    .alert {
+      padding: 14px 18px; border-radius: 6px; margin-bottom: 16px;
+      background: rgba(240,178,50,0.1); border-left: 3px solid var(--yellow);
+      color: #ffd175;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/messages" class="brand">
+        <span class="brand-mark">#</span>
+        Discord MVC
+      </a>
+      <div class="nav-links">
+        <a href="/messages">Messages</a>
+        <a href="/chats">Chats</a>
+      </div>
+      <a href="/messages/new" class="nav-links nav-cta" style="padding: 8px 14px; border-radius: 6px;">+ New Message</a>
+    </div>
+  </nav>
+  <main class="container">

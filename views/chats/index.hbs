@@ -1,0 +1,33 @@
+{{> header}}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Chats</h1>
+    <div class="page-subtitle">{{chats.length}} active chat(s)</div>
+  </div>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Chat ID</th>
+        <th>Title</th>
+        <th>Messages</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each chats}}
+        <tr>
+          <td><span class="id-pill">{{shortId chatId}}</span></td>
+          <td style="font-weight:600;">{{title}}</td>
+          <td><span class="badge badge-secondary">{{messageCount}}</span></td>
+          <td><span style="color:var(--text-muted);font-size:13px;">{{formatDate createdAt}}</span></td>
+        </tr>
+      {{else}}
+        <tr><td colspan="4"><div class="empty">No chats yet.</div></td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+{{> footer}}
