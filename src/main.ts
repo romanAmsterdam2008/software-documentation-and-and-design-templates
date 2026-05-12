@@ -7,6 +7,7 @@ const hbs = require('hbs');
 import { AppModule } from './app.module';
 import { CSV_SEEDER } from './constants/injection-tokens';
 import type { ICsvSeeder } from './bll/interfaces/csv-seeder.interface';
+import { runLab4 } from './lab4/lab4.runner';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -34,6 +35,8 @@ async function bootstrap() {
   } catch (err) {
     logger.error('Seeding failed', err as Error);
   }
+
+  await runLab4();
 
   const port = parseInt(process.env.PORT ?? '3000', 10);
   await app.listen(port);
