@@ -1,0 +1,73 @@
+{{> header}}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">New message</h1>
+    <div class="page-subtitle">Compose a text or attachment message</div>
+  </div>
+  <a href="/messages" class="btn btn-ghost">← Back</a>
+</div>
+
+<form method="post" action="/messages" class="card" style="max-width:720px;">
+  <div class="card-body">
+    <div class="form-group">
+      <label class="form-label">Type</label>
+      <select name="type" id="msg-type" class="form-control" required>
+        <option value="TEXT">TEXT</option>
+        <option value="ATTACHMENT">ATTACHMENT</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Chat</label>
+      <select name="chatId" class="form-control" required>
+        {{#each chats}}
+          <option value="{{chatId}}">{{title}}  ·  {{shortId chatId}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Author</label>
+      <select name="authorId" class="form-control" required>
+        {{#each users}}
+          <option value="{{userId}}">{{username}}  ·  {{shortId userId}}</option>
+        {{/each}}
+      </select>
+    </div>
+
+    <div class="form-group" id="field-text">
+      <label class="form-label">Text</label>
+      <textarea name="text" class="form-control" rows="4" placeholder="Type your message…"></textarea>
+    </div>
+
+    <div class="form-group" id="field-fileUrl" style="display:none;">
+      <label class="form-label">File URL</label>
+      <input name="fileUrl" class="form-control" placeholder="https://…" />
+    </div>
+
+    <div class="form-group" id="field-fileType" style="display:none;">
+      <label class="form-label">File type</label>
+      <input name="fileType" class="form-control" placeholder="image/png" />
+    </div>
+  </div>
+  <div class="card-footer">
+    <a href="/messages" class="btn btn-ghost">Cancel</a>
+    <button class="btn btn-success" type="submit">Create message</button>
+  </div>
+</form>
+
+<script>
+  const sel = document.getElementById('msg-type');
+  const text = document.getElementById('field-text');
+  const url = document.getElementById('field-fileUrl');
+  const ft = document.getElementById('field-fileType');
+  function toggle() {
+    const isText = sel.value === 'TEXT';
+    text.style.display = isText ? '' : 'none';
+    url.style.display = isText ? 'none' : '';
+    ft.style.display = isText ? 'none' : '';
+  }
+  sel.addEventListener('change', toggle);
+  toggle();
+</script>
+{{> footer}}
